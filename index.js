@@ -31,6 +31,29 @@ class ProductManager {
     }
   }
 
+  updateProduct(id, newData) {
+    const productIndex = this.products.findIndex(product => product.id === id);
+    if (productIndex !== -1) {
+      this.products[productIndex] = { ...this.products[productIndex], ...newData };
+    } else {
+      console.log("Product not found.");
+    }
+  }
+
+
+  deleteProduct(id) {
+    const productIndex = this.products.findIndex(product => product.id === id);
+    if (productIndex !== -1) {
+      this.products.splice(productIndex, 1);
+      console.log("Product deleted successfully.");
+    } else {
+      console.log("Product not found.");
+    }
+  }
+
+
+
+
   isProductValid(product) {
     return (
       product.title &&
@@ -75,5 +98,11 @@ console.log(productManager.getProducts());
 
 const foundProduct = productManager.getProductById(1);
 console.log(foundProduct);
+
+productManager.updateProduct(1, { price: 15, stock: 25 });
+console.log(productManager.getProducts());
+
+productManager.deleteProduct(2);
+console.log(productManager.getProducts());
 
 const notFoundProduct = productManager.getProductById(10); // Esto mostrará  el producto no encontrado

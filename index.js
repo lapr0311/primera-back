@@ -1,3 +1,5 @@
+const fs = require ('fs');
+
 class ProductManager {
   constructor() {
     this.products = [];
@@ -68,7 +70,31 @@ class ProductManager {
   isCodeDuplicate(code) {
     return this.products.some((product) => product.code === code);
   }
+
+  saveToFile(filename) {
+    const productsJSON = JSON.stringify(this.products, null, 2);
+    fs.writeFileSync(filename, productsJSON, 'utf8');
+    console.log(`Data saved to ${filename}`);
+  }
+
+
+  loadFromFile(filename) {
+    try {
+      const data = fs.readFileSync(filename, 'utf8');
+      this.products = JSON.parse(data);
+      console.log(`Data loaded from ${filename}`);
+    } catch (error) {
+      console.error("Error loading data:", error.message);
+    }
+  }
+
+
+
+
+
+
 }
+
 
 // Ejemplo de uso
 const productManager = new ProductManager();
@@ -105,4 +131,9 @@ console.log(productManager.getProducts());
 productManager.deleteProduct(2);
 console.log(productManager.getProducts());
 
-const notFoundProduct = productManager.getProductById(10); // Esto mostrará  el producto no encontrado
+
+productManager.saveToFile('products.json');
+productManager.loadFromFile('products.json');
+console.log(productManager.getProducts());
+
+// const notFoundProduct = productManager.getProductById(10); // Esto mostrará  el producto no encontrado
